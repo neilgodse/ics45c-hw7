@@ -84,3 +84,24 @@ TEST(MatrixTests, FillWithFn) {
     EXPECT_EQ(mat[1][2], 12);
     EXPECT_EQ(mat[2][1], 21);
 }
+
+TEST(MatrixTests, Print) {
+    Matrix<int> mat{2, 2};
+    mat[0][0] = 1;
+    mat[0][1] = 2;
+    mat[1][0] = 3;
+    mat[1][1] = 4;
+    stringstream out;
+    out << mat;
+    EXPECT_EQ(out.str(), "       1       2\n       3       4\n");
+}
+
+TEST(MatrixTests, Read) {
+    stringstream in{"1 2 3\n4 5 6"};
+    Matrix<int> mat{2, 3};
+    in >> mat;
+    EXPECT_EQ(mat[0][0], 1);
+    EXPECT_EQ(mat[0][2], 3);
+    EXPECT_EQ(mat[1][0], 4);
+    EXPECT_EQ(mat[1][2], 6);
+}
