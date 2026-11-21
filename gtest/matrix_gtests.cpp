@@ -51,3 +51,36 @@ TEST(MatrixTests, RowsAndCols) {
     EXPECT_EQ(mat3.num_rows(), 0);
     EXPECT_EQ(mat3.num_cols(), 0);
 }
+
+TEST(MatrixTests, Subscript) {
+    Matrix<int> mat{2, 3};
+    mat[0][0] = 1;
+    mat[1][2] = 7;
+    EXPECT_EQ(mat[0][0], 1);
+    EXPECT_EQ(mat[1][2], 7);
+    EXPECT_EQ(mat[0].length(), 3);
+
+    const Matrix<int>& cref = mat;
+    EXPECT_EQ(cref[1][2], 7);
+    EXPECT_ANY_THROW(mat[0][3]);
+    EXPECT_ANY_THROW(mat[2]);
+}
+
+TEST(MatrixTests, Fill) {
+    Matrix<int> mat{3, 4};
+    mat.fill(9);
+    EXPECT_EQ(mat[0][0], 9);
+    EXPECT_EQ(mat[2][3], 9);
+
+    Matrix<string> words{2, 2};
+    words.fill("ok");
+    EXPECT_EQ(words[1][1], "ok");
+}
+
+TEST(MatrixTests, FillWithFn) {
+    Matrix<int> mat{3, 3};
+    mat.fill_with_fn([](int i, int j) { return i * 10 + j; });
+    EXPECT_EQ(mat[0][0], 0);
+    EXPECT_EQ(mat[1][2], 12);
+    EXPECT_EQ(mat[2][1], 21);
+}
