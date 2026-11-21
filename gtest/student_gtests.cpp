@@ -173,3 +173,87 @@ TEST(StudentArray, DestructorUsesArrayDelete) {
     EXPECT_EQ(mismatched, 0u);
     EXPECT_EQ(live, 0u);
 }
+
+// ------------------------------ Matrix<T> ----------------------------- //
+
+TEST(StudentMatrix, Dimensions) {
+    Matrix<int> m{3, 5};
+    EXPECT_EQ(m.num_rows(), 3);
+    EXPECT_EQ(m.num_cols(), 5);
+    for (int i = 0; i < 3; ++i) EXPECT_EQ(m[i].length(), 5);
+
+    Matrix<int> empty;
+    EXPECT_EQ(empty.num_rows(), 0);
+    EXPECT_EQ(empty.num_cols(), 0);
+}
+
+TEST(StudentMatrix, SubscriptReadWrite) {
+    Matrix<int> m{2, 3};
+    m[0][2] = 8;
+    m[1][0] = 4;
+    EXPECT_EQ(m[0][2], 8);
+    EXPECT_EQ(m[1][0], 4);
+
+    const Matrix<int>& cref = m;
+    EXPECT_EQ(cref[0][2], 8);
+    EXPECT_THROW(m[2], string);
+    EXPECT_THROW(m[0][3], string);
+}
+
+TEST(StudentMatrix, FillSetsEveryCell) {
+    Matrix<int> m{3, 4};
+    m.fill(6);
+    for (int i = 0; i < 3; ++i)
+        for (int j = 0; j < 4; ++j) EXPECT_EQ(m[i][j], 6);
+}
+
+TEST(StudentMatrix, FillWithFnRowThenCol) {
+    Matrix<int> m{2, 3};
+    m.fill_with_fn([](int i, int j) { return i * 100 + j; });
+    for (int i = 0; i < 2; ++i)
+        for (int j = 0; j < 3; ++j) EXPECT_EQ(m[i][j], i * 100 + j);
+}
+
+TEST(StudentMatrix, PrintOneRowPerLine) {
+    Matrix<int> m{2, 2};
+    m.fill_with_fn([](int i, int j) { return i * 2 + j; });
+    stringstream out;
+    out << m;
+    EXPECT_EQ(out.str(), "       0       1\n       2       3\n");
+}
+
+TEST(StudentMatrix, ReadRowMajor) {
+    stringstream in{"1 2 3 4 5 6"};
+    Matrix<int> m{3, 2};
+    in >> m;
+    EXPECT_EQ(m[0][0], 1);
+    EXPECT_EQ(m[0][1], 2);
+    EXPECT_EQ(m[1][0], 3);
+    EXPECT_EQ(m[2][1], 6);
+}
+
+TEST(StudentMatrix, CopyIsDeep) {
+    Matrix<int> a{2, 2};
+    a.fill(1);
+    Matrix<int> b{a};
+    b[0][0] = 9;
+    EXPECT_EQ(a[0][0], 1);
+    EXPECT_EQ(b[1][1], 1);
+}
+
+TEST(StudentMatrix, NoLeaksOrBadDeletes) {
+    AllocationTracker tracker;
+    {
+        Matrix<int> m{4, 3};
+        m.fill(2);
+        Matrix<int> copy{m};
+        Matrix<int> moved{std::move(copy)};
+        (void)moved;
+    }
+    size_t live = tracker.get_allocations().size();
+    size_t double_deletes = tracker.get_double_deletes();
+    size_t mismatched = tracker.get_mismatching_deletes();
+    EXPECT_EQ(live, 0u);
+    EXPECT_EQ(double_deletes, 0u);
+    EXPECT_EQ(mismatched, 0u);
+}
