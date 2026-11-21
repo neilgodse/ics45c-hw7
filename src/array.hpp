@@ -45,6 +45,33 @@ public:
             buf[i] = fn(i);
         }
     }
+
+    Array(const Array& other) : len{other.len}, buf{new T[other.len]} {
+        for (int i = 0; i < other.len; ++i) {
+            buf[i] = other.buf[i];
+        }
+    }
+
+    Array(Array&& other) noexcept : len{other.len}, buf{other.buf} {
+        other.len = 0;
+        other.buf = nullptr;
+    }
+
+    friend void swap(Array& lhs, Array& rhs) noexcept {
+        std::swap(lhs.len, rhs.len);
+        std::swap(lhs.buf, rhs.buf);
+    }
+
+    Array& operator=(const Array& other) {
+        Array temp{other};
+        swap(*this, temp);
+        return *this;
+    }
+
+    Array& operator=(Array&& other) noexcept {
+        swap(*this, other);
+        return *this;
+    }
 private:
     int len;
     T* buf;
