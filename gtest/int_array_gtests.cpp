@@ -113,3 +113,31 @@ TEST(IntArrayTests, Fill) {
     arr.fill(5);
     EXPECT_EQ(arr[9], 5);
 }
+
+TEST(IntArrayTests, CopyConstructor) {
+    Array arr{10};
+    arr.fill(20);
+    Array arr2{arr};
+    EXPECT_EQ(arr2.length(), 10);
+    EXPECT_EQ(arr2[0], 20);
+    EXPECT_EQ(arr2[9], 20);
+    Array empty;
+    Array arr3{empty};
+    EXPECT_EQ(arr3.length(), 0);
+}
+
+TEST(IntArrayTests, MoveConstructor) {
+    AllocationTracker tracker;
+    Array arr{10};
+    arr.fill(20);
+    std::size_t allocs_before_move = tracker.get_num_allocations();
+    Array arr2{std::move(arr)};
+    std::size_t allocs_after_move = tracker.get_num_allocations();
+    EXPECT_EQ(allocs_before_move, allocs_after_move);
+    EXPECT_EQ(arr2.length(), 10);
+    EXPECT_EQ(arr2[0], 20);
+    EXPECT_EQ(arr2[9], 20);
+    Array empty;
+    Array arr3{std::move(empty)};
+    EXPECT_EQ(arr3.length(), 0);
+}

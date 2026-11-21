@@ -37,6 +37,17 @@ public:
             buf[i] = val;
         }
     }
+
+    Array(const Array& other) : len{other.len}, buf{new int[other.len]} {
+        for (int i = 0; i < other.len; ++i) {
+            buf[i] = other.buf[i];
+        }
+    }
+
+    Array(Array&& other) noexcept : len{other.len}, buf{other.buf} {
+        other.len = 0;
+        other.buf = nullptr;
+    }
 private:
     int len;
     int* buf;
