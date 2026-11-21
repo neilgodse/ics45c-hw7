@@ -31,6 +31,12 @@ public:
         }
         return buf[index];
     }
+
+    void fill(int val) {
+        for (int i = 0; i < len; ++i) {
+            buf[i] = val;
+        }
+    }
 private:
     int len;
     int* buf;
