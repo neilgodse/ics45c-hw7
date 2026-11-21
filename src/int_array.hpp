@@ -9,14 +9,11 @@
 
 class Array {
 public:
-
     Array() : len{0}, buf{nullptr} {}
 
     explicit Array(int len) : len{len}, buf{new int[len]} {}
 
     int length() const { return len; }
-
-    ~Array() { delete[] buf; }
 
     int& operator[](int index) {
         if (index < 0 || index >= len) {
@@ -37,6 +34,8 @@ public:
             buf[i] = val;
         }
     }
+
+    ~Array() { delete[] buf; }
 
     Array(const Array& other) : len{other.len}, buf{new int[other.len]} {
         for (int i = 0; i < other.len; ++i) {
@@ -64,12 +63,12 @@ public:
         swap(*this, other);
         return *this;
     }
+
 private:
     int len;
     int* buf;
 };
 
-
 inline std::ostream& operator<<(std::ostream& out, const Array& array) {
     std::stringstream temp;
     temp << std::setprecision(2) << std::fixed << std::right;
@@ -87,20 +86,4 @@ inline std::istream& operator>>(std::istream& in, Array& array) {
     return in;
 }
 
-inline std::ostream& operator<<(std::ostream& out, const Array& array) {
-    std::stringstream temp;
-    temp << std::setprecision(2) << std::fixed << std::right;
-    for (int i = 0; i < array.length(); ++i) {
-        temp << std::setw(8) << array[i];
-    }
-    out << temp.str();
-    return out;
-}
-
-inline std::istream& operator>>(std::istream& in, Array& array) {
-    for (int i = 0; i < array.length(); ++i) {
-        in >> array[i];
-    }
-    return in;
-}
 #endif
