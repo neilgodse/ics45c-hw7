@@ -17,6 +17,20 @@ public:
     int length() const { return len; }
 
     ~Array() { delete[] buf; }
+
+    int& operator[](int index) {
+        if (index < 0 || index >= len) {
+            throw std::string{"Exception operator[](" + std::to_string(index) + ") Out Of Range"};
+        }
+        return buf[index];
+    }
+
+    const int& operator[](int index) const {
+        if (index < 0 || index >= len) {
+            throw std::string{"Exception operator[](" + std::to_string(index) + ") Out Of Range"};
+        }
+        return buf[index];
+    }
 private:
     int len;
     int* buf;

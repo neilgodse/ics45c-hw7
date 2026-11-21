@@ -34,3 +34,26 @@ TEST(IntArrayTests, Length) {
     EXPECT_EQ(arr.length(), 10);
     EXPECT_EQ(Array{}.length(), 0);
 }
+
+TEST(IntArrayTests, Subscript) {
+    Array arr{10};
+    arr[0] = 3;
+    arr[3] = 5;
+    EXPECT_EQ(arr[0], 3);
+    EXPECT_EQ(arr[3], 5);
+
+    const Array& cref = arr;
+    EXPECT_EQ(cref[0], 3);
+    EXPECT_EQ(cref[3], 5);
+}
+
+TEST(IntArrayTests, OutOfBounds) {
+    Array arr{10};
+    EXPECT_ANY_THROW(arr[11]);
+    EXPECT_ANY_THROW(arr[10]);
+    EXPECT_ANY_THROW(arr[-1]);
+
+    const Array& cref = arr;
+    EXPECT_ANY_THROW(cref[10]);
+    EXPECT_ANY_THROW(cref[-1]);
+}
