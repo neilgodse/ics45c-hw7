@@ -99,3 +99,29 @@ TEST(ArrayTests, Read) {
     EXPECT_EQ(words[0], "foo");
     EXPECT_EQ(words[1], "bar");
 }
+
+TEST(ArrayTests, Fill) {
+    Array<int> arr{10};
+    arr.fill(20);
+    EXPECT_EQ(arr[0], 20);
+    arr.fill(5);
+    EXPECT_EQ(arr[9], 5);
+
+    Array<string> words{3};
+    words.fill("hi");
+    EXPECT_EQ(words[0], "hi");
+    EXPECT_EQ(words[2], "hi");
+}
+
+TEST(ArrayTests, FillWithFn) {
+    Array<int> arr{5};
+    arr.fill_with_fn([](int i) { return i * i; });
+    EXPECT_EQ(arr[0], 0);
+    EXPECT_EQ(arr[2], 4);
+    EXPECT_EQ(arr[4], 16);
+
+    Array<string> words{3};
+    words.fill_with_fn([](int i) { return string(i, 'x'); });
+    EXPECT_EQ(words[0], "");
+    EXPECT_EQ(words[2], "xx");
+}

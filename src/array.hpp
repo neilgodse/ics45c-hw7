@@ -32,6 +32,19 @@ public:
         }
         return buf[index];
     }
+
+    void fill(T val) {
+        for (int i = 0; i < len; ++i) {
+            buf[i] = val;
+        }
+    }
+
+    template <typename Fn>
+    void fill_with_fn(Fn fn) {
+        for (int i = 0; i < len; ++i) {
+            buf[i] = fn(i);
+        }
+    }
 private:
     int len;
     T* buf;
