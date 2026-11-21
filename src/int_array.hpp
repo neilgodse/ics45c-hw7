@@ -10,6 +10,13 @@
 class Array {
 public:
 
+    Array() : len{0}, buf{nullptr} {}
+
+    explicit Array(int len) : len{len}, buf{new int[len]} {}
+
+    int length() const { return len; }
+
+    ~Array() { delete[] buf; }
 private:
     int len;
     int* buf;
