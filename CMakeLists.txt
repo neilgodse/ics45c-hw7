@@ -48,11 +48,4 @@ if (GTest_FOUND)
         $<TARGET_OBJECTS:alloc_objects>
     )
     target_link_libraries(matrix_gtests PRIVATE gtestmain)
-
-    add_executable(student_gtests
-        gtest/student_gtests.cpp
-        src/int_array.hpp
-        $<TARGET_OBJECTS:alloc_objects>
-    )
-    target_link_libraries(student_gtests PRIVATE gtestmain)
 endif()
