@@ -81,3 +81,27 @@ TEST(IntArrayTests, Read) {
     EXPECT_EQ(arr[1], 2);
     EXPECT_EQ(arr[2], 3);
 }
+
+TEST(IntArrayTests, Print) {
+    stringstream out;
+
+    Array arr{3};
+    arr[0] = 0;
+    arr[1] = 1;
+    arr[2] = 2;
+
+    out << arr;
+
+    EXPECT_EQ(out.str(), "       0       1       2");
+}
+
+TEST(IntArrayTests, Read) {
+    stringstream in{"1 2 3 4"};
+
+    Array arr{3};
+    in >> arr;
+
+    EXPECT_EQ(arr[0], 1);
+    EXPECT_EQ(arr[1], 2);
+    EXPECT_EQ(arr[2], 3);
+}
